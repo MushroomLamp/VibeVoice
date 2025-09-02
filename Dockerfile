@@ -13,8 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /workspace
 
-# The project will be mounted as a volume; dependencies are installed at container start
+# Copy the repo code into the image
+COPY . /workspace
 
-# Default command is provided by docker-compose via docker/start.sh
-
-
+# Install project dependencies
+RUN pip install --upgrade pip \
+ && pip install -e . \
+ && pip install flash-attn --no-build-isolation

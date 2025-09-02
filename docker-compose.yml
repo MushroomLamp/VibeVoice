@@ -1,6 +1,9 @@
 services:
   vibevoice:
-    image: nvcr.io/nvidia/pytorch:24.12-py3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vibevoice:latest
     container_name: vibevoice
     ipc: host
     ulimits:
@@ -8,19 +11,17 @@ services:
       stack: -1
     working_dir: /workspace
     volumes:
-      - ./:/workspace:rw
-      - ${HOME}/.cache/huggingface:/root/.cache/huggingface  # mount host cache
+      - ${HOME}/.cache/huggingface:/root/.cache/huggingface
+    ports:
+      - "7860:7860"
     environment:
       HF_HOME: /root/.cache/huggingface
       TRANSFORMERS_CACHE: /root/.cache/huggingface
-    ports:
-      - "7860:7860"
-    command: >
-      bash -c "
-        pip install -e . &&
-        pip install flash-attn --no-build-isolation &&
-        apt-get update && apt-get install -y ffmpeg &&
-        python demo/gradio_demo.py --model_path microsoft/VibeVoice-1.5B
-      "
+      HF_HUB_ENABLE_HF_TRANSFER: 1
+      DEVICE: cuda
     gpus: all
     shm_size: "16gb"
+    command: >
+      python demo/gradio_demo.py
+      --model_path ${MODEL_PATH:-microsoft/VibeVoice-1.5B}
+      --share
