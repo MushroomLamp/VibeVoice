@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Caches
+.cache/
+**/.cache/
+**/__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project artifacts
+Figures/
+*.mp4
+*.wav
+*.flac
+*.ogg
+*.m4a
+*.aac
+
+# Notebook outputs
+*.ipynb_checkpoints/
+
+# Docker
+Dockerfile*
+!Dockerfile
+
+# Logs
+*.log
