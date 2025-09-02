@@ -1,27 +1,26 @@
 services:
   vibevoice:
-    build: .
-    image: vibevoice:latest
+    image: nvcr.io/nvidia/pytorch:24.12-py3
     container_name: vibevoice
     ipc: host
     ulimits:
       memlock: -1
       stack: -1
     working_dir: /workspace
-
     volumes:
       - ./:/workspace:rw
-      - ${HF_HOME}:/root/.cache/huggingface
-
+      - ${HOME}/.cache/huggingface:/root/.cache/huggingface  # mount host cache
     environment:
       HF_HOME: /root/.cache/huggingface
       TRANSFORMERS_CACHE: /root/.cache/huggingface
-
     ports:
       - "7860:7860"
-
     command: >
-      python demo/gradio_demo.py --model_path ${MODEL_PATH} --share
-
+      bash -c "
+        pip install -e . &&
+        pip install flash-attn --no-build-isolation &&
+        apt-get update && apt-get install -y ffmpeg &&
+        python demo/gradio_demo.py --model_path microsoft/VibeVoice-Large
+      "
     gpus: all
     shm_size: "16gb"
