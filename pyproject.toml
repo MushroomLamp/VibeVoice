@@ -27,11 +27,14 @@ dependencies = [
     "numpy",
     "scipy",
     "librosa",
+    "soundfile",
     "ml-collections",
     "absl-py",
     "gradio",
     "av",
-    "aiortc"
+    "aiortc",
+    "fastapi",
+    "uvicorn[standard]"
 ]
 
 

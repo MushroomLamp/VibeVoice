@@ -1,23 +1,27 @@
 services:
-  vibevoice_api:
+  vibevoice:
     build: .
     image: vibevoice:latest
-    container_name: vibevoice_api
+    container_name: vibevoice
     ipc: host
     ulimits:
       memlock: -1
       stack: -1
     working_dir: /workspace
+
     volumes:
       - ./:/workspace:rw
       - ${HF_HOME}:/root/.cache/huggingface
+
     environment:
       HF_HOME: /root/.cache/huggingface
       TRANSFORMERS_CACHE: /root/.cache/huggingface
-      MODEL_PATH: ${MODEL_PATH}
+
     ports:
-      - "8001:8001"
+      - "7860:7860"
+
     command: >
-      uvicorn api.main:app --host 0.0.0.0 --port 8001
+      python demo/gradio_demo.py --model_path ${MODEL_PATH} --share
+
     gpus: all
     shm_size: "16gb"
